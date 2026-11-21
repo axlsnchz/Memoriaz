@@ -14,6 +14,8 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 interface ApiService {
+
+    @Query("user_matricula") userMatricula: String
     @POST("api/auth/register")
     suspend fun register(@Body request: RegisterRequest):
             Response<AuthResponse>
@@ -54,4 +56,6 @@ interface ApiService {
     suspend fun getPendingNotifications(
         @Path("matricula") matricula: String
     ): Response<List<PendingNotificationDto>>
+
+
 }

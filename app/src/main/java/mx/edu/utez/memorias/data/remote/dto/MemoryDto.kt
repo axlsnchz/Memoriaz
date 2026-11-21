@@ -22,8 +22,10 @@ data class UpdateMemoryRequest(
     val latitud: Double,
     val longitud: Double,
     val descripcion: String,
-    @SerializedName("change_summary") val changeSummary: String
-)
+    @SerializedName("change_summary") val changeSummary: String,
+    @SerializedName("user_matricula") val userMatricula: String,
+
+    )
 data class LikeToggleRequest(
     @SerializedName("liker_matricula") val likerMatricula: String
 )
