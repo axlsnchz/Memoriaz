@@ -37,8 +37,8 @@ sealed interface HomeEvent {
 class HomeViewModel(
     private val memoryRepository: MemoryRepository,
     private val authRepository: AuthRepository,
-    private val preferencesRepository: UserPreferencesRepository,
-    viewModelScope: CoroutineScope
+    private val preferencesRepository: UserPreferencesRepository
+
 ) : ViewModel() {
     private val _selectedTab = MutableStateFlow(HomeTab.EXPLORAR)
     private val _isRefreshing = MutableStateFlow(false)

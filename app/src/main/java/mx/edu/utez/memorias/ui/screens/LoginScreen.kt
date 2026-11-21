@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.material.PageIndicatorDefaults.style
-import androidx.wear.compose.material.Text
 import mx.edu.utez.memorias.ui.viewmodels.AuthEvent
 import mx.edu.utez.memorias.ui.viewmodels.AuthViewModel
 

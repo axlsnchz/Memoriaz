@@ -10,6 +10,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import kotlin.math.sqrt
+import androidx.compose.runtime.getValue
 
 @Composable
 fun ShakeDetector(

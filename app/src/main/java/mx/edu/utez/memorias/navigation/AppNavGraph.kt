@@ -60,7 +60,6 @@ fun AppNavGraph(appContainer: AppContainer) {
                     HomeViewModel(
                         appContainer.memoryRepository,
                         appContainer.authRepository,
-
                         appContainer.userPreferencesRepository
 
                         )
@@ -92,7 +91,8 @@ fun AppNavGraph(appContainer: AppContainer) {
                 }
             )
         ) { backStackEntry ->
-            val rawId = backStackEntry.arguments?.getInt("memoryId") ?: -1 val addEditViewModel: AddEditMemoryViewModel = viewModel(factory = simpleFactory {
+            val rawId = backStackEntry.arguments?.getInt("memoryId") ?: -1
+            val addEditViewModel: AddEditMemoryViewModel = viewModel(factory = simpleFactory {
             AddEditMemoryViewModel(
                 appContainer.memoryRepository,
                 appContainer.userPreferencesRepository

@@ -15,12 +15,13 @@ import retrofit2.Response
 import retrofit2.http.*
 interface ApiService {
 
-    @Query("user_matricula") userMatricula: String
     @POST("api/auth/register")
     suspend fun register(@Body request: RegisterRequest):
             Response<AuthResponse>
     @POST("api/auth/login")
-    suspend fun login(@Body request: LoginRequest): Response<AuthResponse> @GET("api/memories")
+    suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
+
+    @GET("api/memories")
     suspend fun getMemories(): Response<List<MemoryDto>>
     @Multipart
     @POST("api/memories")
@@ -37,6 +38,7 @@ interface ApiService {
     @PUT("api/memories/{id}")
     suspend fun updateMemory(
         @Path("id") memoryId: Int,
+        @Query("user_matricula") userMatricula: String,
         @Body request: UpdateMemoryRequest
     ): Response<MemoryDto>
     @DELETE("api/memories/{id}")
