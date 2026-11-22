@@ -15,17 +15,20 @@ import mx.edu.utez.memorias.AppContainer
 import mx.edu.utez.memorias.ui.screens.AddEditMemoryScreen
 import mx.edu.utez.memorias.ui.screens.HomeScreen
 import mx.edu.utez.memorias.ui.screens.LoginScreen
+import mx.edu.utez.memorias.ui.screens.MemoryDetailScreen
 import mx.edu.utez.memorias.ui.screens.RegisterScreen
 import mx.edu.utez.memorias.ui.viewmodels.AddEditMemoryViewModel
 import mx.edu.utez.memorias.ui.viewmodels.AuthViewModel
 import mx.edu.utez.memorias.ui.viewmodels.HomeViewModel
+import mx.edu.utez.memorias.ui.viewmodels.MemoryDetailViewModel
 
 
 @Composable
 fun AppNavGraph(appContainer: AppContainer) {
     val navController = rememberNavController()
-    val authViewModel: AuthViewModel = viewModel(factory = simpleFactory { AuthViewModel(appContainer.authRepository) })
-    val session by authViewModel.sessionState.collectAsStateWithLifecycle() // Esperar a que DataStore emita el estado inicial de la sesión
+    val authViewModel: AuthViewModel = viewModel(factory = simpleFactory { AuthViewModel(appContainer.authRepository)
+    })
+    val session by authViewModel.sessionState.collectAsStateWithLifecycle() // Esperar carga inicial de DataStore antes de montar el NavHost
     val currentSession = session ?: return
     val startDestination = if (currentSession.isLoggedIn)
         AppRoutes.Home.route else AppRoutes.Login.route
@@ -61,8 +64,7 @@ fun AppNavGraph(appContainer: AppContainer) {
                         appContainer.memoryRepository,
                         appContainer.authRepository,
                         appContainer.userPreferencesRepository
-
-                        )
+                    )
                 })
             HomeScreen(
                 viewModel = homeViewModel,
@@ -71,9 +73,8 @@ fun AppNavGraph(appContainer: AppContainer) {
                     navController.navigate(AppRoutes.AddEditMemory.createRoute())
                 },
                 onNavigateToDetail = { memoryId ->
-                    // En Etapa 2 abre el modo edición directamente; en Etapa 3 apuntará a MemoryDetail
 
-                    navController.navigate(AppRoutes.AddEditMemory.createRoute(memoryId))
+                    navController.navigate(AppRoutes.MemoryDetail.createRoute(memoryId))
                 },
                 onLoggedOut = {
                     navController.navigate(AppRoutes.Login.route) {
@@ -104,9 +105,30 @@ fun AppNavGraph(appContainer: AppContainer) {
                 onNavigateBack = { navController.popBackStack() }
             )
         }
+        composable(
+            route = AppRoutes.MemoryDetail.route,
+            arguments = listOf(navArgument("memoryId") { type =
+                NavType.IntType })
+        ) { backStackEntry ->
+            val memoryId = backStackEntry.arguments?.getInt("memoryId") ?:return@composable
+            val detailViewModel: MemoryDetailViewModel = viewModel(factory =simpleFactory {
+                MemoryDetailViewModel(
+                    appContainer.memoryRepository,
+                    appContainer.userPreferencesRepository
+                )
+            })
+            MemoryDetailScreen(
+                memoryId = memoryId,
+                viewModel = detailViewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToEdit = { id ->
+
+                    navController.navigate(AppRoutes.AddEditMemory.createRoute(id))
+                }
+            )
+        }
     }
 }
-
 private inline fun <reified T : ViewModel> simpleFactory(
     crossinline creator: () -> T
 ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
